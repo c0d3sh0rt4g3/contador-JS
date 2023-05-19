@@ -1,10 +1,12 @@
 // Una variable es un espacio para almacenar datos (por ahora simples).
 let nFirstVer = 99
 let nSecondVer = 999
+let nMinCounter = 60
 
 let intervalFirstVer
 let intervalSecondVer
 let clockInterval
+let minCounterInterval
 
 let stopped
 // Funcion que se ejecuta al abrir la pagina y que define lo se hace cada segundo
@@ -15,7 +17,8 @@ const cuentaAtras = () => {
     stopped = false
     intervalFirstVer = setInterval(marchaAtrasFirstVer, 1000);
     intervalSecondVer = setInterval(marchaAtrasSecondVer, 1000);
-    clockInterval = setInterval(updateClock, 1000)
+    clockInterval = setInterval(updateClock, 1)
+    minCounterInterval = setInterval(oneMinCount, 1000)
 }
 
 //
@@ -35,11 +38,11 @@ const marchaAtrasFirstVer = () => {
     numbersDiv.innerHTML = ""
     // Cambiamos parte de la p�gina usando DOM
     if (nFirstVer <= 9){
-        firstDigit.src = "0.png"
-        secondDigit.src = nFirstVer + ".png"
+        firstDigit.src = "img/0.png"
+        secondDigit.src = "img/" + nFirstVer + ".png"
     }else {
-        firstDigit.src = number[0] +".png"
-        secondDigit.src = number[1] +".png"
+        firstDigit.src = "img/" + number[0] +".png"
+        secondDigit.src = "img/" + number[1] +".png"
     }
 
     numbersDiv.appendChild(firstDigit)
@@ -58,16 +61,17 @@ const marchaAtrasSecondVer = () => {
     } else{ nSecondVer = 0 }
     numbersDiv.innerHTML = ""
     if (nSecondVer <= 9){
-        firstDigit.src = 0 + ".png"
-        secondDigit.src = nSecondVer + ".png"
+        firstDigit.src = "img/0.png"
+        secondDigit.src = "img/0.png"
+        thirdDigit.src = "img/" + nSecondVer + ".png"
     }else if (nSecondVer <= 99){
-        firstDigit.src = "0.png"
-        secondDigit.src = number[0] +".png"
-        thirdDigit.src = number[1] +".png"
+        firstDigit.src = "img/0.png"
+        secondDigit.src = "img/" + number[0] +".png"
+        thirdDigit.src = "img/" + number[1] +".png"
     }else {
-        firstDigit.src = number[0] +".png"
-        secondDigit.src = number[1] +".png"
-        thirdDigit.src = number[2] + ".png"
+        firstDigit.src = "img/" + number[0] +".png"
+        secondDigit.src = "img/" + number[1] +".png"
+        thirdDigit.src = "img/" + number[2] + ".png"
     }
 
     numbersDiv.appendChild(firstDigit)
@@ -105,27 +109,27 @@ const updateClock = () => {
     const secondString = seconds.toString()
 
     if (hours <= 9){
-        hourFirstDigit.src = "0.png"
-        hourSecondDigit.src = hourString + ".png"
+        hourFirstDigit.src = "img/0.png"
+        hourSecondDigit.src = "img/" + hourString + ".png"
     }else {
-        hourFirstDigit.src = hourString[0] + ".png"
-        hourSecondDigit.src = hourString[1] + ".png"
+        hourFirstDigit.src = "img/" + hourString[0] + ".png"
+        hourSecondDigit.src = "img/" + hourString[1] + ".png"
     }
 
     if (minutes <= 9){
-        minFirstDigit.src = "0.png"
-        minSecondDigit.src = minuteString + ".png"
+        minFirstDigit.src = "img/0.png"
+        minSecondDigit.src = "img/" + minuteString + ".png"
     }else {
-        minFirstDigit.src = minuteString[0] + ".png"
-        minSecondDigit.src = minuteString[1] + ".png"
+        minFirstDigit.src = "img/" + minuteString[0] + ".png"
+        minSecondDigit.src = "img/" + minuteString[1] + ".png"
     }
 
     if (seconds <= 9){
-        secFirstDigit.src = "0.png"
-        secSecondDigit.src = secondString + ".png"
+        secFirstDigit.src = "img/0.png"
+        secSecondDigit.src = "img/" + secondString + ".png"
     }else {
-        secFirstDigit.src = secondString[0] + ".png"
-        secSecondDigit.src = secondString[1] + ".png"
+        secFirstDigit.src = "img/" + secondString[0] + ".png"
+        secSecondDigit.src = "img/" + secondString[1] + ".png"
     }
 
     hourSpan.appendChild(hourFirstDigit)
@@ -138,16 +142,56 @@ const updateClock = () => {
     secSpan.appendChild(secSecondDigit)
 }
 
+const oneMinCount = () =>{
+    let minCountDown = document.getElementById("oneMinCountDown")
+
+    let minCountFirstDigit = document.createElement("img")
+    let minCountSecondDigit = document.createElement("img")
+
+    let secCountFirstDigit = document.createElement("img")
+    let secCountSecondDigit = document.createElement("img")
+
+    let nMinCounterString = nMinCounter.toString()
+    if (nMinCounter < 60){
+        nMinCounter--
+    } else{ nMinCounter = 60 }
+    minCountDown.innerHTML = ""
+    if(nMinCounter === 60){
+        minCountFirstDigit.src = "img/0.png"
+        minCountSecondDigit.src = "img/1.png"
+        secCountFirstDigit.src = "img/0.png"
+        secCountSecondDigit.src = "img/0.png"
+    }else if(nMinCounter <= 9) {
+        minCountFirstDigit.src = "img/0.png"
+        minCountSecondDigit.src = "img/0.png"
+        secCountFirstDigit.src = "img/0.png"
+        secCountSecondDigit.src = "img/" + nMinCounterString + ".png"
+    }else {
+        minCountFirstDigit.src = "img/0.png"
+        minCountSecondDigit.src = "img/0.png"
+        secCountFirstDigit.src = "img/" + nMinCounter[0] + ".png"
+        secCountSecondDigit.src = "img/" + nMinCounter[1] + ".png"
+    }
+
+    minCountDown.appendChild(minCountFirstDigit)
+    minCountDown.appendChild(minCountSecondDigit)
+
+    minCountDown.appendChild(secCountFirstDigit)
+    minCountDown.appendChild(secCountSecondDigit)
+}
+
 const stop = () => {
     clearInterval(intervalFirstVer)
     clearInterval(intervalSecondVer)
     clearInterval(clockInterval)
+    clearInterval(minCounterInterval)
     return stopped = true
 }
 
 const reset = () =>{
     nFirstVer = 99
     nSecondVer = 999
+    nMinCounter = 60
 }
 
 const resume = () =>{
