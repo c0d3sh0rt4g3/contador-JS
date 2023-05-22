@@ -2,34 +2,34 @@
 let nFirstVer = 99
 let nSecondVer = 0
 let nMinCounter = 60
+let clockCounter = 3600
 
 let intervalFirstVer
 let intervalSecondVer
 let clockInterval
 let minCounterInterval
-let customTimerInterval
 
-let stopped
+let stoppedFirst
+let stoppedSecond
 let stoppedMinCount
+let stoppedClock;
 
-const cuentas= () => {
-    // Con setInterval definimos acciones que se realizan cada cierto tiempo.
-    // El tiempo se expresa en mil�simas de segundo.
-    // En este caso se ejecuta marchaAtras cada segundo = 1000 miliseconds.
-    stopped = false
+const startFirstCount = () => {
+    stoppedFirst = false
     intervalFirstVer = setInterval(marchaAtrasFirstVer, 1000);
+}
+
+const startSecondCount = () => {
+    stoppedSecond = false
     intervalSecondVer = setInterval(marchaAtrasSecondVer, 1000);
 }
+
 const clock =() =>{
-    stopped = false
-    clockInterval = setInterval(updateClock, 1)
+    clockInterval = setInterval(updateCountdown, 1000);
 }
 const cuentaAtrasMinuto = () => {
     stoppedMinCount = false
     minCounterInterval = setInterval(oneMinCount, 1000)
-}
-const customTimer = () => {
-    customTimerInterval = setInterval(givenTimer, 1000)
 }
 const marchaAtrasFirstVer = () => {
     // Esta instrucci�n ejecuta c�digo condicional.
@@ -86,68 +86,7 @@ const marchaAtrasSecondVer = () => {
     numbersDiv.appendChild(secondDigit)
     numbersDiv.appendChild(thirdDigit)
 }
-const updateClock = () => {
 
-    let hourSpan = document.getElementById("hourSpan")
-    let minSpan = document.getElementById("minSpan")
-    let secSpan = document.getElementById("secSpan")
-
-    hourSpan.innerHTML = ""
-    minSpan.innerHTML = ""
-    secSpan.innerHTML = ""
-
-    let hourFirstDigit = document.createElement("img")
-    let hourSecondDigit = document.createElement("img")
-
-    let minFirstDigit = document.createElement("img")
-    let minSecondDigit = document.createElement("img")
-
-    let secFirstDigit = document.createElement("img")
-    let secSecondDigit = document.createElement("img")
-
-    const now = new Date()
-
-    const hours = now.getHours()
-    const minutes = now.getMinutes()
-    const seconds = now.getSeconds()
-
-    const hourString = hours.toString()
-    const minuteString = minutes.toString()
-    const secondString = seconds.toString()
-
-    if (hours <= 9){
-        hourFirstDigit.src = "img/0.png"
-        hourSecondDigit.src = "img/" + hourString + ".png"
-    }else {
-        hourFirstDigit.src = "img/" + hourString[0] + ".png"
-        hourSecondDigit.src = "img/" + hourString[1] + ".png"
-    }
-
-    if (minutes <= 9){
-        minFirstDigit.src = "img/0.png"
-        minSecondDigit.src = "img/" + minuteString + ".png"
-    }else {
-        minFirstDigit.src = "img/" + minuteString[0] + ".png"
-        minSecondDigit.src = "img/" + minuteString[1] + ".png"
-    }
-
-    if (seconds <= 9){
-        secFirstDigit.src = "img/0.png"
-        secSecondDigit.src = "img/" + secondString + ".png"
-    }else {
-        secFirstDigit.src = "img/" + secondString[0] + ".png"
-        secSecondDigit.src = "img/" + secondString[1] + ".png"
-    }
-
-    hourSpan.appendChild(hourFirstDigit)
-    hourSpan.appendChild(hourSecondDigit)
-
-    minSpan.appendChild(minFirstDigit)
-    minSpan.appendChild(minSecondDigit)
-
-    secSpan.appendChild(secFirstDigit)
-    secSpan.appendChild(secSecondDigit)
-}
 const oneMinCount = () =>{
     let minCountDown = document.getElementById("oneMinCountDown")
 
@@ -187,11 +126,14 @@ const oneMinCount = () =>{
     minCountDown.appendChild(secCountFirstDigit)
     minCountDown.appendChild(secCountSecondDigit)
 }
-/*const givenTimer = () => {
-    let customTimer = document.getElementById("customTimer")
 
-    minutes = parseInt(document.getElementById("minutesWanted").value)
-    seconds = parseInt(document.getElementById("secondsWanted").value)
+function updateCountdown() {
+    const countdownElement = document.getElementById('reloj')
+
+    countdownElement.innerHTML = ""
+
+    let hourFirstDigit = document.createElement("img")
+    let hourSecondDigit = document.createElement("img")
 
     let minFirstDigit = document.createElement("img")
     let minSecondDigit = document.createElement("img")
@@ -199,68 +141,83 @@ const oneMinCount = () =>{
     let secFirstDigit = document.createElement("img")
     let secSecondDigit = document.createElement("img")
 
-    let minString = minutes.toString()
-    let secString = seconds.toString()
+    const hoursRemaining = Math.floor(clockCounter / 3600)
+    const minutesRemaining = Math.floor((clockCounter % 3600) / 60)
+    const secondsRemaining = Math.floor(clockCounter % 60)
 
-    if (isNaN(minutes) && isNaN(seconds)){
-        alert("ERROR: No se han introducido numeros ni en el campo de minutos ni en el de segundos")
-    }else if (isNaN(minutes)){
-        alert("ERROR: No se han introducido numeros en el campo de minutos")
-    } else if (isNaN(seconds)){
-        alert("ERROR: No se han introducido numeros en el campo de segundos")
-    }else if(seconds > 59){
-        alert("ERROR: El máximo de segundos admitidos es 59")
-    }else if(minutes > 59){
-        alert("ERROR: El máximo de minutos admitidos es 59")
-    }
 
-    if (seconds > 0){
-        seconds--
-    } else {
-        seconds = 59
-        minutes--
-    }
-    customTimer.innerHTML = ""
+    const hourString = hoursRemaining.toString()
+    const minuteString = minutesRemaining.toString()
+    const secondString = secondsRemaining.toString()
 
-    if(minutes > 9){
-        minFirstDigit.src = "img/" + minString[0] + ".png"
-        minSecondDigit.src = "img/" + minString[1] + ".png"
+    if (hoursRemaining <= 9){
+        hourFirstDigit.src = "img/0.png"
+        hourSecondDigit.src = "img/" + hourString + ".png"
     }else {
+        hourFirstDigit.src = "img/" + hourString[0] + ".png"
+        hourSecondDigit.src = "img/" + hourString[1] + ".png"
+    }
+
+    if (minutesRemaining <= 9){
         minFirstDigit.src = "img/0.png"
-        minSecondDigit.src = "img/" + minString + ".png"
-    }
-
-    if (seconds > 9){
-        secFirstDigit.src = "img/" + secString[0] + ".png"
-        secSecondDigit.src = "img/" + secString[1] + ".png"
+        minSecondDigit.src = "img/" + minuteString + ".png"
     }else {
-        secFirstDigit.src = "img/0.png"
-        secSecondDigit.src = "img/" + secString + ".png"
+        minFirstDigit.src = "img/" + minuteString[0] + ".png"
+        minSecondDigit.src = "img/" + minuteString[1] + ".png"
     }
 
-    customTimer.appendChild(minFirstDigit)
-    customTimer.appendChild(minSecondDigit)
+    if (secondsRemaining <= 9){
+        secFirstDigit.src = "img/0.png"
+        secSecondDigit.src = "img/" + secondString + ".png"
+    }else {
+        secFirstDigit.src = "img/" + secondString[0] + ".png"
+        secSecondDigit.src = "img/" + secondString[1] + ".png"
+    }
 
-    customTimer.appendChild(secFirstDigit)
-    customTimer.appendChild(secSecondDigit)
-}*/
-const stop = () => {
-    clearInterval(intervalFirstVer)
-    clearInterval(intervalSecondVer)
-    clearInterval(clockInterval)
-    return stopped = true
+    countdownElement.appendChild(hourFirstDigit)
+    countdownElement.appendChild(hourSecondDigit)
+
+    countdownElement.appendChild(minFirstDigit)
+    countdownElement.appendChild(minSecondDigit)
+
+    countdownElement.appendChild(secFirstDigit)
+    countdownElement.appendChild(secSecondDigit)
+
+    // Resta 1 segundo al tiempo restante
+    clockCounter--;
 }
-const reset = () => {
+
+const stopFirst = () => {
+    clearInterval(intervalFirstVer)
+    return stoppedFirst = true
+}
+const stopSecond = () => {
+    clearInterval(intervalSecondVer)
+    return stoppedSecond = true
+}
+
+const resetFirst = () => {
     nFirstVer = 99
+}
+const resetSecond = () =>{
     nSecondVer = 0
 }
-const resume = () => {
-    if (stopped){
-        cuentaAtras()
+const resumeFirst = () => {
+    if (stoppedFirst){
+        startFirstCount()
     }else {
         alert("ERROR: El contador no puede ser reanudado si no se ha pausado.")
     }
 }
+
+const resumeSecond = () => {
+    if (stoppedSecond){
+        startSecondCount()
+    }else {
+        alert("ERROR: El contador no puede ser reanudado si no se ha pausado.")
+    }
+}
+
 const stopMinCount = () => {
     clearInterval(minCounterInterval)
     return stoppedMinCount = true

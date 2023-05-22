@@ -4,28 +4,25 @@
 		<title>Cuenta Atras</title>
 		<script src="index.js"></script>
 	</head>
-	<body onload="cuentas(); clock()">
+	<body onload="startFirstCount(); startSecondCount(); cuentaAtrasMinuto(); clock();">
 		<div id="numerosPrimeraVer"></div><br>
+		<button onclick="stopFirst()">Parar 1 contador</button>
+		<button onclick="resumeFirst()">Continuar 1 contador</button>
+		<button onclick="resetFirst()">Reiniciar 1 contador</button><br><br>
 		<div id="numerosSegundaVer"></div><br>
-		<div id="reloj">
-			<span id="hourSpan"></span>
-			<span id="minSpan"></span>
-			<span id="secSpan"></span>
-			<span id="milliSpan"></span>
-		</div><br>
+		<button onclick="stopSecond()">Parar 2 contador</button>
+		<button onclick="resumeSecond()">Continuar 2 contador</button>
+		<button onclick="resetSecond()">Reiniciar 2 contador</button><br><br>
+		<div id="reloj"></div><br>
 		<div id="oneMinCountDown"></div>
 		<div id="customTimer"></div>
-		<button onclick="stop()">Parar</button>
-		<button onclick="resume()">Continuar</button>
-		<button onclick="reset()">Reiniciar</button><br><br>
-		<button onclick="cuentaAtrasMinuto()">Empezar cuenta atras de 1 minuto</button>
 		<button onclick="stopMinCount()">Parar cuenta 1 minuto</button>
 		<button onclick="resumeMinCount()">Continuar cuenta 1 minuto</button>
 		<button onclick="resetMinCount()">Reiniciar cuenta 1 minuto</button><br><br>
-		<label for="minutesWanted">Cuantos minutos desea para el temporizador?</label>
-		<input type="text" id="minutesWanted">
-		<label for="secondsWanted">y segundos?</label>
-		<input type="text" id="secondsWanted">
-		<button onclick="customTimer()">Aceptar</button>
+		<input type="text" id="hoursInput" placeholder="Horas">
+		<input type="text" id="minutesInput" placeholder="Minutos">
+		<input type="text" id="secondsInput" placeholder="Segundos">
+		<button id="startButton" onclick="clock();">Iniciar</button>
+		<p id="countdown"></p>
 	</body>
 </html>
